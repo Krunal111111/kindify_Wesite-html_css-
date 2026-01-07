@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kindify – From Gen Z to Kindify</title>
+  <meta name="description" content="Kindify connects donors, volunteers and verified trusts — mobile-first platform for secure, verified giving." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Page-specific tweaks to center hero and remove the right-side store/trust box -->
+  <style>
+    /* Force hero content to center and use a single column layout on desktop */
+    .hero-grid {
+      grid-template-columns: 1fr !important;
+      align-items: center;
+      justify-items: center;
+      gap: 18px;
+    }
+
+    /* Slightly tighten hero vertical spacing so the headline sits visually centered */
+    .hero {
+      padding: 64px 0;
+    }
+
+    /* Remove any hero-side or store-card if present (defensive) */
+    .hero-side,
+    .store-card,
+    .hero-media + .store-card {
+      display: none !important;
+    }
+
+    /* Remove the trust-strip under the hero (if present) */
+    .trust-strip { display: none !important; }
+
+    /* Ensure hero text is horizontally centered */
+    .hero-content { text-align: center; max-width: 860px; margin: 0 auto; }
+
+    /* Small responsive tweak to keep the hero compact on very wide screens */
+    @media (min-width: 1400px) {
+      .hero { padding: 88px 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="navbar" role="banner">
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Kindify home">
+        <img src="assets/logo.png" alt="Kindify logo" class="logo">
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <nav class="nav-links" id="primaryNav" aria-label="Main menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="category.html">Categories</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="request.html">Request</a>
+        <button id="themeToggle" class="btn small ghost" aria-pressed="false" title="Toggle theme">☀️</button>
+      </nav>
+
+      <div class="header-cta" aria-hidden="false">
+        <!-- Keep Play Store link in header only (not in hero-side) -->
+        <a class="btn btn-primary" href="intent://open#Intent;package=com.kindify.app;end" rel="noopener">Open App</a>
+        <a class="store-badge" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer" aria-label="Download on Google Play">
+          <img src="assets/play-badge.png" alt="Get it on Google Play" height="36">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <!-- Updated heading per request -->
+          <h1>Kindify – From Gen Z to Kindify</h1>
+
+          <!-- Keep the lead concise and app-first -->
+          <p class="lead">
+            A mobile-first platform connecting donors, volunteers and verified trusts. All donations, volunteering and requests are securely handled via the Kindify Android app for verification and transparent reporting.
+          </p>
+
+          <div class="btn-group" style="margin-top:18px;">
+            <a class="btn white" href="category.html">Explore Categories</a>
+            <a class="btn outline" href="volunteer.html">Join as Volunteer</a>
+            <a class="btn ghost" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Get the app</a>
+          </div>
+
+        </div>
+
+        <!-- hero-media removed on purpose (right-side rectangle removed as requested) -->
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section light">
+      <div class="container">
+        <h2>How Kindify works</h2>
+        <div class="grid why-grid">
+          <div class="card feature">
+            <div class="icon">1</div>
+            <h3>Request</h3>
+            <p>Trusts, volunteers or community members submit verified requests for food, clothes, school kits or emergency aid through the app.</p>
+          </div>
+
+          <div class="card feature">
+            <div class="icon">2</div>
+            <h3>Coordinate</h3>
+            <p>Local partners and volunteers coordinate collections and deliveries. Donors choose campaigns or individual requests to support.</p>
+          </div>
+
+          <div class="card feature">
+            <div class="icon">3</div>
+            <h3>Deliver</h3>
+            <p>Items are delivered with documentation — photos, receipts and short beneficiary notes — so donors see real impact.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="section">
+      <div class="container">
+        <h2>Built for trusts and local partners</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Verified intake</h3>
+            <p>Register your trust/NGO to post needs, schedule distributions and receive funds or goods directly. Verification keeps distributions fair.</p>
+          </div>
+          <div class="card">
+            <h3>Transparent reporting</h3>
+            <p>Upload distribution receipts and photos. Donors receive concise reports so everyone sees how help reached people.</p>
+          </div>
+          <div class="card">
+            <h3>Volunteer coordination</h3>
+            <p>Mobilise local volunteers for packing, delivery and outreach — manage shifts and communicate through the app.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAMPAIGNS PREVIEW -->
+    <section class="section light">
+      <div class="container">
+        <h2>Current campaigns</h2>
+        <div class="grid campaigns-grid" id="campaignList">
+          <div class="card campaign" data-key="winter" data-title="Winter Relief Drive" data-desc="Warm clothing & blankets for vulnerable families.">
+            <div class="campaign-emoji" aria-hidden="true">❄</div>
+            <h4>Winter Relief Drive</h4>
+            <p class="muted">Help distribute warm clothing & blankets</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+
+          <div class="card campaign" data-key="food" data-title="Food for All" data-desc="Nutritious meals & grocery support.">
+            <div class="campaign-emoji" aria-hidden="true">🍱</div>
+            <h4>Food for All</h4>
+            <p class="muted">Nutritious meals & grocery support</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+
+          <div class="card campaign" data-key="education" data-title="Education for Every Child" data-desc="School kits & fee support.">
+            <div class="campaign-emoji" aria-hidden="true">🎓</div>
+            <h4>Education for Every Child</h4>
+            <p class="muted">School kits, tuition assistance</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD CTA -->
+    <section class="section">
+      <div class="container text-center">
+        <h2>Download the Kindify app</h2>
+        <p class="muted" style="max-width:760px;margin:10px auto;">
+          Use the app to request help, join drives, donate and track outcomes. Trusted partners and volunteers make every distribution accountable.
+        </p>
+        <div style="margin-top:16px;">
+          <a class="btn primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Get the app on Play Store</a>
+          <a class="btn outline" href="volunteer.html" style="margin-left:10px">Learn about volunteering</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p>© 2026 Kindify | Ahmedabad, India — Built with kindness</p>
+    </div>
+  </footer>
+
+  <!-- floating app CTA -->
+  <a href="PLAY_STORE_URL" class="fab" aria-label="Open Kindify app" target="_blank" rel="noopener noreferrer">Get the app</a>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // nav toggle
+    (function(){
+      const navToggle = document.getElementById('navToggle');
+      const primaryNav = document.getElementById('primaryNav');
+      if (navToggle && primaryNav) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          primaryNav.classList.toggle('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

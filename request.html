@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Request Help | Kindify</title>
+  <meta name="description" content="Submit requests to verified trusts on Kindify" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#requestForm">Skip to form</a>
+
+  <header class="navbar">
+    <div class="container nav" role="navigation">
+      <a class="brand" href="index.html"><img src="assets/logo.png" alt="Kindify" class="logo"></a>
+      <button class="nav-toggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="nav-links" id="primaryNav">
+        <a href="index.html">Home</a>
+        <a href="category.html">Categories</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="request.html" class="active">Request</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Request Help from Trust</h2>
+        <p>Requests are handled by verified trusts through the Kindify App. Emergency requests are prioritised.</p>
+
+        <form id="requestForm" class="card form-card" novalidate enctype="multipart/form-data">
+          <label>
+            Full name
+            <input type="text" name="name" required placeholder="Your full name" aria-required="true">
+          </label>
+
+          <label>
+            Phone / WhatsApp
+            <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX" pattern="^\+?\d{7,15}$" title="Include country code, e.g. +919876543210" aria-required="true">
+          </label>
+
+          <label>
+            Type of help
+            <select name="type" required>
+              <option value="">Select</option>
+              <option value="food">Food</option>
+              <option value="medical">Medical</option>
+              <option value="shelter">Shelter</option>
+              <option value="education">Education</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label>
+            Describe your request
+            <textarea name="message" rows="5" required placeholder="Briefly describe the situation" aria-required="true"></textarea>
+          </label>
+
+          <label>
+            Upload image (optional)
+            <input type="file" name="image" accept="image/*" id="requestImage">
+            <small class="muted">Max 5MB. Helpful for verification.</small>
+          </label>
+
+          <div id="imagePreview" aria-hidden="true" style="display:none;margin-top:8px;"></div>
+
+          <div class="btn-group">
+            <button class="btn primary" type="submit">Submit Request</button>
+            <a class="btn outline" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Submit via App</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Kindify</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function(){
+      // nav toggle
+      const navToggle = document.querySelector('.nav-toggle');
+      const primaryNav = document.getElementById('primaryNav');
+      if (navToggle && primaryNav) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          primaryNav.classList.toggle('open');
+        });
+      }
+
+      const form = document.getElementById('requestForm');
+      const imageInput = document.getElementById('requestImage');
+      const imagePreview = document.getElementById('imagePreview');
+      const toast = document.getElementById('toast');
+
+      function showToast(msg, ms=3000){
+        if(!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), ms);
+      }
+
+      imageInput && imageInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) { imagePreview.style.display='none'; imagePreview.innerHTML=''; return; }
+        if (file.size > 5 * 1024 * 1024) {
+          showToast('Image too large. Max 5MB.');
+          imageInput.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(ev){
+          imagePreview.style.display = 'block';
+          imagePreview.innerHTML = `<img src="${ev.target.result}" alt="Uploaded preview" style="max-width:240px;border-radius:8px;display:block;">`;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      form && form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // In website flow: instruct user to use app for submission.
+        showToast('For verified requests please use the Kindify app. This website only displays information.');
+        // optionally, we could collect the form and send to your backend if available.
+      });
+    })();
+  </script>
+</body>
+</html>

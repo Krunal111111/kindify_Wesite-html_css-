@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volunteer with Kindify</title>
+  <meta name="description" content="Join Kindify as a volunteer through our mobile app." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#volunteerMain">Skip to content</a>
+
+  <header class="navbar">
+    <div class="container nav" role="navigation">
+      <a class="brand" href="index.html"><img src="assets/logo.png" class="logo" alt="Kindify Logo"></a>
+      <button class="nav-toggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="nav-links" id="primaryNav">
+        <a href="index.html">Home</a>
+        <a href="category.html">Categories</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="volunteer.html" class="active">Volunteer</a>
+        <a href="request.html">Request</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="volunteerMain">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Become a Volunteer</h1>
+        <p>Be the change. Join verified drives and campaigns through the Kindify App.</p>
+      </div>
+    </section>
+
+    <section class="section light">
+      <div class="container">
+        <div class="grid">
+          <div class="card">
+            <div class="emoji" aria-hidden="true">🤝</div>
+            <h3>Verified Campaigns</h3>
+            <p>All volunteer opportunities are linked to verified NGOs and trusted organizations to ensure transparency and safety.</p>
+          </div>
+
+          <div class="card">
+            <div class="emoji" aria-hidden="true">📍</div>
+            <h3>Location-Based Tasks</h3>
+            <p>Get volunteer tasks based on your city and nearby areas directly from the Kindify App.</p>
+          </div>
+
+          <div class="card">
+            <div class="emoji" aria-hidden="true">📅</div>
+            <h3>Flexible Time</h3>
+            <p>Choose volunteering schedules that match your availability — weekends, events, or emergency relief.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="card center-box">
+          <h2>Volunteer Login Required</h2>
+          <p>To ensure safety and verification, volunteering is managed exclusively through the Kindify mobile application.</p>
+
+          <p class="muted" style="margin-top:10px;">Please log in using the Kindify App to view tasks, register for campaigns, and track your impact.</p>
+
+          <div class="btn-group" style="margin-top:30px;">
+            <a href="index.html" class="btn outline">Cancel</a>
+            <a href="PLAY_STORE_URL" class="btn primary" target="_blank" rel="noopener noreferrer">Open App</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Kindify | Together We Create Impact</p>
+    </div>
+  </footer>
+
+  <script>
+    // nav toggle
+    (function(){
+      const navToggle = document.querySelector('.nav-toggle');
+      const primaryNav = document.getElementById('primaryNav');
+      if (navToggle && primaryNav) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          primaryNav.classList.toggle('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Campaigns | Kindify</title>
+  <meta name="description" content="Active campaigns at Kindify" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Small page-specific modal padding tweaks (keeps style.css authoritative) */
+    .modal-card { max-width: 760px; width: calc(100% - 48px); max-height: 86vh; overflow: hidden; }
+    .modal-header { padding: 18px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .modal-title { font-size:20px; font-weight:900; margin:0; }
+    .modal-close { background:transparent;border:none;color:var(--text);font-size:20px;padding:6px 10px; cursor:pointer;border-radius:8px; }
+    .modal-body { padding:18px 20px; overflow:auto; max-height: calc(86vh - 150px); }
+    .modal-body p { margin:10px 0; line-height:1.55; color:var(--text); }
+    .modal-body ul { margin:10px 0 10px 20px; color:var(--muted); }
+    .modal-footer { padding:14px 20px; border-top:1px solid rgba(255,255,255,0.02); display:flex; justify-content:flex-end; gap:12px; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#campaignList">Skip to campaigns</a>
+
+  <header class="navbar" role="banner">
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="index.html"><img src="assets/logo.png" alt="Kindify logo" class="logo"></a>
+      <button class="nav-toggle" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="nav-links" id="primaryNav">
+        <a href="index.html">Home</a>
+        <a href="category.html">Categories</a>
+        <a class="active" href="campaigns.html">Campaigns</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="request.html">Request</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2>Active Campaigns</h2>
+
+        <div class="filters" aria-hidden="true">
+          <label class="search-wrapper" for="campaignSearch">
+            <input id="campaignSearch" class="search-input" type="search" placeholder="Search campaigns..." aria-label="Search campaigns"/>
+          </label>
+        </div>
+
+        <div class="grid campaigns-grid" id="campaignList" role="list">
+          <div class="card campaign" data-key="winter" data-title="Winter Relief Drive" data-desc="Providing warm clothes and blankets to families impacted by cold weather.">
+            <div class="campaign-emoji" aria-hidden="true">❄</div>
+            <h4>Winter Relief Drive</h4>
+            <p class="muted">Help distribute warm clothing & blankets</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+
+          <div class="card campaign" data-key="food" data-title="Food for All" data-desc="Meals & monthly grocery kits for vulnerable families and daily-wage workers.">
+            <div class="campaign-emoji" aria-hidden="true">🍱</div>
+            <h4>Food for All</h4>
+            <p class="muted">Nutritious meals & grocery support</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+
+          <div class="card campaign" data-key="education" data-title="Education for Every Child" data-desc="School supplies and fee support to help children stay in school.">
+            <div class="campaign-emoji" aria-hidden="true">🎓</div>
+            <h4>Education for Every Child</h4>
+            <p class="muted">School kits, tuition assistance</p>
+            <div class="card-actions">
+              <button class="btn small" data-action="open-campaign">Details</button>
+              <a class="btn small primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Kindify</p>
+    </div>
+  </footer>
+
+  <!-- Modal (campaign details) -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal-card" role="document" tabindex="-1">
+      <div class="modal-header">
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <button class="modal-close" aria-label="Close details" title="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="modalContent" class="modal-content" role="region" aria-live="polite"></div>
+      </div>
+
+      <div class="modal-footer">
+        <a id="donateBtn" class="btn primary" href="PLAY_STORE_URL" target="_blank" rel="noopener noreferrer">Donate via App</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function(){
+      // responsive nav toggle
+      const navToggle = document.querySelector('.nav-toggle');
+      const primaryNav = document.getElementById('primaryNav');
+      if (navToggle && primaryNav) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          primaryNav.classList.toggle('open');
+        });
+      }
+
+      // Modal elements and focus management
+      const modal = document.getElementById('modal');
+      const modalCard = modal.querySelector('.modal-card');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalContent = document.getElementById('modalContent');
+      const donateBtn = document.getElementById('donateBtn');
+      const modalClose = modal.querySelector('.modal-close');
+      let lastFocused = null;
+
+      // Campaign content map — each ~10 lines (readable paragraphs + bullets)
+      const CONTENT = {
+        winter: {
+          title: 'Winter Relief Drive',
+          html: `
+            <p>The Winter Relief Drive sources and distributes warm clothing, blankets and thermal essentials to people exposed to severe cold.</p>
+            <p>We prioritise the most vulnerable: elderly, infants, people sleeping rough and families in poorly insulated homes.</p>
+            <p>Local partner NGOs and volunteers identify high-need neighbourhoods through surveys and community networks.</p>
+            <p>Items are quality-checked, sized and packed into dignity-friendly bundles before distribution.</p>
+            <p>Distribution events are organised at community centres, shelters or via door-to-door visits when needed.</p>
+            <p>Each distribution is documented with receipts, photos and short beneficiary notes to maintain transparency.</p>
+            <p>Donors receive concise reports that indicate numbers of households served and items delivered.</p>
+            <p>We also run emergency rapid-response rounds for sudden cold snaps or displacement events.</p>
+            <p>Volunteers help with packing, transport and safe, respectful delivery to recipients.</p>
+            <p>Impact: fewer cold-related illnesses, improved night-time safety and increased comfort for those in need.</p>
+          `
+        },
+        food: {
+          title: 'Food for All',
+          html: `
+            <p>Food for All provides nutritious meals and monthly grocery kits to families struggling with food insecurity.</p>
+            <p>We prioritise households with children, pregnant women, elderly dependents and those who lost livelihoods recently.</p>
+            <p>Verified local partners prepare balanced meal packets or assemble grocery kits with staples and essential condiments.</p>
+            <p>Distribution is scheduled and tracked — beneficiary lists and receipts are maintained for accountability.</p>
+            <p>Donors receive photographic evidence and short beneficiary notes where feasible.</p>
+            <p>Emergency food assistance is available for disasters, sudden income loss or other crises.</p>
+            <p>Recurring support programs can be set up for a few months while families stabilise income sources.</p>
+            <p>Our teams coordinate with local kitchens, ration shops and volunteers to ensure efficient delivery.</p>
+            <p>Impact: immediate nutrition support, stress reduction for families and continuity while recovery plans are made.</p>
+            <p>Reporting and transparent verification build trust between donors and implementing partners.</p>
+          `
+        },
+        education: {
+          title: 'Education for Every Child',
+          html: `
+            <p>Education for Every Child supplies school kits, tuition support and learning resources to students at risk of dropping out.</p>
+            <p>Support includes school bags, textbooks, stationery and targeted fee assistance where required.</p>
+            <p>We work with schools and trusted local partners to identify needy students and confirm eligibility.</p>
+            <p>Funds for fees are routed through verified trusts and schools issue receipts for donor accountability.</p>
+            <p>Distribution of kits is coordinated with schools to ensure proper allocation and minimal disruption.</p>
+            <p>Where possible, we pair material support with tutoring or short learning camps to boost outcomes.</p>
+            <p>Reports include beneficiary lists, distribution photos and teacher feedback on impact.</p>
+            <p>Donors can choose one-time support or sponsor students for a term/year depending on program options.</p>
+            <p>Impact: improved attendance, reduced dropout risk and better learning continuity for vulnerable children.</p>
+            <p>Transparent tracking and partner verification ensure resources reach intended students.</p>
+          `
+        }
+      };
+
+      // Utility: open modal and trap focus
+      function openModalFor(key, triggerEl) {
+        const info = CONTENT[key] || { title: 'Campaign', html: '<p>Details are available in the Kindify app.</p>' };
+        lastFocused = triggerEl || document.activeElement;
+        modalTitle.textContent = info.title;
+        modalContent.innerHTML = info.html;
+        donateBtn.href = 'PLAY_STORE_URL'; // replace with real link or deep-link
+        modal.setAttribute('aria-hidden', 'false');
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        trapFocus(modal);
+      }
+
+      function closeModal() {
+        modal.setAttribute('aria-hidden', 'true');
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        releaseFocusTrap();
+        if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+      }
+
+      // Focus trap implementation
+      let focusableElements = [];
+      let firstFocusable = null;
+      let lastFocusable = null;
+      function trapFocus(container) {
+        focusableElements = Array.from(container.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'))
+          .filter(el => el.offsetParent !== null);
+        if (focusableElements.length) {
+          firstFocusable = focusableElements[0];
+          lastFocusable = focusableElements[focusableElements.length - 1];
+          firstFocusable.focus();
+        } else {
+          modalCard.focus();
+        }
+        document.addEventListener('keydown', handleKeydown);
+      }
+
+      function releaseFocusTrap() {
+        document.removeEventListener('keydown', handleKeydown);
+      }
+
+      function handleKeydown(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+        } else if (e.key === 'Tab' && modal.classList.contains('open')) {
+          if (focusableElements.length === 0) {
+            e.preventDefault();
+            return;
+          }
+          if (e.shiftKey) {
+            if (document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            }
+          } else {
+            if (document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        }
+      }
+
+      // Click handler for Details buttons
+      document.body.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="open-campaign"]');
+        if (btn) {
+          const card = btn.closest('.card.campaign');
+          if (!card) return;
+          const key = card.dataset.key;
+          openModalFor(key, btn);
+          return;
+        }
+
+        // modal close via close button
+        if (e.target.closest('.modal-close')) {
+          closeModal();
+        }
+      });
+
+      // Close modal when clicking outside modal-card
+      modal.addEventListener('click', (ev) => {
+        if (!ev.target.closest('.modal-card')) {
+          closeModal();
+        }
+      });
+
+      // Ensure modal state is announced and not tabbable when hidden
+      const observer = new MutationObserver(() => {
+        if (modal.getAttribute('aria-hidden') === 'true') {
+          modal.querySelectorAll('a, button, input, textarea, select').forEach(el => el.setAttribute('tabindex', '-1'));
+        } else {
+          modal.querySelectorAll('a, button, input, textarea, select').forEach(el => el.removeAttribute('tabindex'));
+        }
+      });
+      observer.observe(modal, { attributes: true });
+
+    })();
+  </script>
+</body>
+</html>
